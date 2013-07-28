@@ -7,82 +7,65 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E6C95E4017A20BA80003B69B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6C95E3F17A20BA80003B69B /* Foundation.framework */; };
-		E6C95E4517A20BA80003B69B /* string_trie.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = E6C95E4417A20BA80003B69B /* string_trie.h */; };
-		E6C95E4717A20BA80003B69B /* string_trie.m in Sources */ = {isa = PBXBuildFile; fileRef = E6C95E4617A20BA80003B69B /* string_trie.m */; };
-		E6C95E4E17A20BA80003B69B /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6C95E4D17A20BA80003B69B /* XCTest.framework */; };
-		E6C95E4F17A20BA80003B69B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6C95E3F17A20BA80003B69B /* Foundation.framework */; };
-		E6C95E5117A20BA80003B69B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6C95E5017A20BA80003B69B /* UIKit.framework */; };
-		E6C95E5417A20BA80003B69B /* libstring_trie.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E6C95E3C17A20BA80003B69B /* libstring_trie.a */; };
-		E6C95E5A17A20BA80003B69B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E6C95E5817A20BA80003B69B /* InfoPlist.strings */; };
-		E6C95E5C17A20BA80003B69B /* string_trieTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E6C95E5B17A20BA80003B69B /* string_trieTests.m */; };
+		E66187C217A3A49B00E62C1E /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6C95E4D17A20BA80003B69B /* XCTest.framework */; };
+		E66187C817A3A49B00E62C1E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E66187C617A3A49B00E62C1E /* InfoPlist.strings */; };
+		E66187CA17A3A49B00E62C1E /* string_trieTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = E66187C917A3A49B00E62C1E /* string_trieTests.mm */; };
+		E66187CF17A3A50200E62C1E /* NSString+CPP.mm in Sources */ = {isa = PBXBuildFile; fileRef = E66187BB17A3A29A00E62C1E /* NSString+CPP.mm */; };
+		E66187D217A4D9E800E62C1E /* wordList.txt in Resources */ = {isa = PBXBuildFile; fileRef = E66187D117A4D9E800E62C1E /* wordList.txt */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		E6C95E5217A20BA80003B69B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E6C95E3417A20BA80003B69B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E6C95E3B17A20BA80003B69B;
-			remoteInfo = string_trie;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		E6C95E3A17A20BA80003B69B /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
-			files = (
-				E6C95E4517A20BA80003B69B /* string_trie.h in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		E6C95E3C17A20BA80003B69B /* libstring_trie.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libstring_trie.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E66187BA17A3A29A00E62C1E /* NSString+CPP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+CPP.h"; sourceTree = "<group>"; };
+		E66187BB17A3A29A00E62C1E /* NSString+CPP.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSString+CPP.mm"; sourceTree = "<group>"; };
+		E66187C117A3A49B00E62C1E /* string_trieTests.xctest */ = {isa = PBXFileReference; explicitFileType = folder; includeInIndex = 0; path = string_trieTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E66187C517A3A49B00E62C1E /* string_trieTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "string_trieTests-Info.plist"; sourceTree = "<group>"; };
+		E66187C717A3A49B00E62C1E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E66187C917A3A49B00E62C1E /* string_trieTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = string_trieTests.mm; sourceTree = "<group>"; };
+		E66187CB17A3A49B00E62C1E /* string_trieTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "string_trieTests-Prefix.pch"; sourceTree = "<group>"; };
+		E66187D117A4D9E800E62C1E /* wordList.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = wordList.txt; sourceTree = "<group>"; };
 		E6C95E3F17A20BA80003B69B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		E6C95E4317A20BA80003B69B /* string_trie-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "string_trie-Prefix.pch"; sourceTree = "<group>"; };
-		E6C95E4417A20BA80003B69B /* string_trie.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = string_trie.h; sourceTree = "<group>"; };
-		E6C95E4617A20BA80003B69B /* string_trie.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = string_trie.m; sourceTree = "<group>"; };
-		E6C95E4C17A20BA80003B69B /* string_trieTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = string_trieTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E6C95E4417A20BA80003B69B /* string_trie.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = string_trie.hpp; sourceTree = "<group>"; };
+		E6C95E4617A20BA80003B69B /* string_trie.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; path = string_trie.tpp; sourceTree = "<group>"; };
 		E6C95E4D17A20BA80003B69B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		E6C95E5017A20BA80003B69B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		E6C95E5717A20BA80003B69B /* string_trieTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "string_trieTests-Info.plist"; sourceTree = "<group>"; };
-		E6C95E5917A20BA80003B69B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		E6C95E5B17A20BA80003B69B /* string_trieTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = string_trieTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		E6C95E3917A20BA80003B69B /* Frameworks */ = {
+		E66187BE17A3A49B00E62C1E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6C95E4017A20BA80003B69B /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E6C95E4917A20BA80003B69B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E6C95E5417A20BA80003B69B /* libstring_trie.a in Frameworks */,
-				E6C95E4E17A20BA80003B69B /* XCTest.framework in Frameworks */,
-				E6C95E5117A20BA80003B69B /* UIKit.framework in Frameworks */,
-				E6C95E4F17A20BA80003B69B /* Foundation.framework in Frameworks */,
+				E66187C217A3A49B00E62C1E /* XCTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E66187C317A3A49B00E62C1E /* string_trieTests */ = {
+			isa = PBXGroup;
+			children = (
+				E66187C917A3A49B00E62C1E /* string_trieTests.mm */,
+				E66187D117A4D9E800E62C1E /* wordList.txt */,
+				E66187C417A3A49B00E62C1E /* Supporting Files */,
+			);
+			path = string_trieTests;
+			sourceTree = "<group>";
+		};
+		E66187C417A3A49B00E62C1E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E66187C517A3A49B00E62C1E /* string_trieTests-Info.plist */,
+				E66187C617A3A49B00E62C1E /* InfoPlist.strings */,
+				E66187CB17A3A49B00E62C1E /* string_trieTests-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		E6C95E3317A20BA80003B69B = {
 			isa = PBXGroup;
 			children = (
 				E6C95E4117A20BA80003B69B /* string_trie */,
-				E6C95E5517A20BA80003B69B /* string_trieTests */,
+				E66187C317A3A49B00E62C1E /* string_trieTests */,
 				E6C95E3E17A20BA80003B69B /* Frameworks */,
 				E6C95E3D17A20BA80003B69B /* Products */,
 			);
@@ -91,8 +74,7 @@
 		E6C95E3D17A20BA80003B69B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E6C95E3C17A20BA80003B69B /* libstring_trie.a */,
-				E6C95E4C17A20BA80003B69B /* string_trieTests.xctest */,
+				E66187C117A3A49B00E62C1E /* string_trieTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -102,7 +84,6 @@
 			children = (
 				E6C95E3F17A20BA80003B69B /* Foundation.framework */,
 				E6C95E4D17A20BA80003B69B /* XCTest.framework */,
-				E6C95E5017A20BA80003B69B /* UIKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -110,75 +91,32 @@
 		E6C95E4117A20BA80003B69B /* string_trie */ = {
 			isa = PBXGroup;
 			children = (
-				E6C95E4417A20BA80003B69B /* string_trie.h */,
-				E6C95E4617A20BA80003B69B /* string_trie.m */,
-				E6C95E4217A20BA80003B69B /* Supporting Files */,
+				E6C95E4417A20BA80003B69B /* string_trie.hpp */,
+				E6C95E4617A20BA80003B69B /* string_trie.tpp */,
+				E66187BA17A3A29A00E62C1E /* NSString+CPP.h */,
+				E66187BB17A3A29A00E62C1E /* NSString+CPP.mm */,
 			);
 			path = string_trie;
-			sourceTree = "<group>";
-		};
-		E6C95E4217A20BA80003B69B /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				E6C95E4317A20BA80003B69B /* string_trie-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		E6C95E5517A20BA80003B69B /* string_trieTests */ = {
-			isa = PBXGroup;
-			children = (
-				E6C95E5B17A20BA80003B69B /* string_trieTests.m */,
-				E6C95E5617A20BA80003B69B /* Supporting Files */,
-			);
-			path = string_trieTests;
-			sourceTree = "<group>";
-		};
-		E6C95E5617A20BA80003B69B /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				E6C95E5717A20BA80003B69B /* string_trieTests-Info.plist */,
-				E6C95E5817A20BA80003B69B /* InfoPlist.strings */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E6C95E3B17A20BA80003B69B /* string_trie */ = {
+		E66187C017A3A49B00E62C1E /* string_trieTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E6C95E5F17A20BA80003B69B /* Build configuration list for PBXNativeTarget "string_trie" */;
+			buildConfigurationList = E66187CC17A3A49B00E62C1E /* Build configuration list for PBXNativeTarget "string_trieTests" */;
 			buildPhases = (
-				E6C95E3817A20BA80003B69B /* Sources */,
-				E6C95E3917A20BA80003B69B /* Frameworks */,
-				E6C95E3A17A20BA80003B69B /* CopyFiles */,
+				E66187BD17A3A49B00E62C1E /* Sources */,
+				E66187BE17A3A49B00E62C1E /* Frameworks */,
+				E66187BF17A3A49B00E62C1E /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-			);
-			name = string_trie;
-			productName = string_trie;
-			productReference = E6C95E3C17A20BA80003B69B /* libstring_trie.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-		E6C95E4B17A20BA80003B69B /* string_trieTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E6C95E6217A20BA80003B69B /* Build configuration list for PBXNativeTarget "string_trieTests" */;
-			buildPhases = (
-				E6C95E4817A20BA80003B69B /* Sources */,
-				E6C95E4917A20BA80003B69B /* Frameworks */,
-				E6C95E4A17A20BA80003B69B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				E6C95E5317A20BA80003B69B /* PBXTargetDependency */,
 			);
 			name = string_trieTests;
 			productName = string_trieTests;
-			productReference = E6C95E4C17A20BA80003B69B /* string_trieTests.xctest */;
+			productReference = E66187C117A3A49B00E62C1E /* string_trieTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -202,55 +140,40 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E6C95E3B17A20BA80003B69B /* string_trie */,
-				E6C95E4B17A20BA80003B69B /* string_trieTests */,
+				E66187C017A3A49B00E62C1E /* string_trieTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		E6C95E4A17A20BA80003B69B /* Resources */ = {
+		E66187BF17A3A49B00E62C1E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6C95E5A17A20BA80003B69B /* InfoPlist.strings in Resources */,
+				E66187D217A4D9E800E62C1E /* wordList.txt in Resources */,
+				E66187C817A3A49B00E62C1E /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		E6C95E3817A20BA80003B69B /* Sources */ = {
+		E66187BD17A3A49B00E62C1E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6C95E4717A20BA80003B69B /* string_trie.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E6C95E4817A20BA80003B69B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E6C95E5C17A20BA80003B69B /* string_trieTests.m in Sources */,
+				E66187CA17A3A49B00E62C1E /* string_trieTests.mm in Sources */,
+				E66187CF17A3A50200E62C1E /* NSString+CPP.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		E6C95E5317A20BA80003B69B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E6C95E3B17A20BA80003B69B /* string_trie */;
-			targetProxy = E6C95E5217A20BA80003B69B /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXVariantGroup section */
-		E6C95E5817A20BA80003B69B /* InfoPlist.strings */ = {
+		E66187C617A3A49B00E62C1E /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				E6C95E5917A20BA80003B69B /* en */,
+				E66187C717A3A49B00E62C1E /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -258,6 +181,49 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		E66187CD17A3A49B00E62C1E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "string_trieTests/string_trieTests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				INFOPLIST_FILE = "string_trieTests/string_trieTests-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		E66187CE17A3A49B00E62C1E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "string_trieTests/string_trieTests-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				INFOPLIST_FILE = "string_trieTests/string_trieTests-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
 		E6C95E5D17A20BA80003B69B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -324,69 +290,18 @@
 			};
 			name = Release;
 		};
-		E6C95E6017A20BA80003B69B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DSTROOT = /tmp/string_trie.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "string_trie/string_trie-Prefix.pch";
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		E6C95E6117A20BA80003B69B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DSTROOT = /tmp/string_trie.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "string_trie/string_trie-Prefix.pch";
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		E6C95E6317A20BA80003B69B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(SYSTEM_APPS_DIR)/Xcode5-DP3.app/Contents/Developer/Library/Frameworks",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "string_trie/string_trie-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "string_trieTests/string_trieTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		E6C95E6417A20BA80003B69B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(SYSTEM_APPS_DIR)/Xcode5-DP3.app/Contents/Developer/Library/Frameworks",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "string_trie/string_trie-Prefix.pch";
-				INFOPLIST_FILE = "string_trieTests/string_trieTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		E66187CC17A3A49B00E62C1E /* Build configuration list for PBXNativeTarget "string_trieTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E66187CD17A3A49B00E62C1E /* Debug */,
+				E66187CE17A3A49B00E62C1E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E6C95E3717A20BA80003B69B /* Build configuration list for PBXProject "string_trie" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -395,22 +310,6 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
-		};
-		E6C95E5F17A20BA80003B69B /* Build configuration list for PBXNativeTarget "string_trie" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E6C95E6017A20BA80003B69B /* Debug */,
-				E6C95E6117A20BA80003B69B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-		};
-		E6C95E6217A20BA80003B69B /* Build configuration list for PBXNativeTarget "string_trieTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E6C95E6317A20BA80003B69B /* Debug */,
-				E6C95E6417A20BA80003B69B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
