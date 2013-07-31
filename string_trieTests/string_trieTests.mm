@@ -2,8 +2,6 @@
 
 #import "NSString+CPP.h"
 
-#include <iostream>
-
 #include "string_trie.hpp"
 
 
