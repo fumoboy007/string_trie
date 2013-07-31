@@ -3,7 +3,7 @@
 #include <string>
 
 
-@interface NSString (CPP)
+@interface NSString (CPPConversors)
 
 - (std::basic_string<unichar>)cppString;
 

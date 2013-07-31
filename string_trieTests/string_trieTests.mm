@@ -1,6 +1,6 @@
 #import <XCTest/XCTest.h>
 
-#import "NSString+CPP.h"
+#import "NSString+CPPConversors.h"
 
 #include "string_trie.hpp"
 

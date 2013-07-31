@@ -10,13 +10,13 @@
 		E66187C217A3A49B00E62C1E /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6C95E4D17A20BA80003B69B /* XCTest.framework */; };
 		E66187C817A3A49B00E62C1E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E66187C617A3A49B00E62C1E /* InfoPlist.strings */; };
 		E66187CA17A3A49B00E62C1E /* string_trieTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = E66187C917A3A49B00E62C1E /* string_trieTests.mm */; };
-		E66187CF17A3A50200E62C1E /* NSString+CPP.mm in Sources */ = {isa = PBXBuildFile; fileRef = E66187BB17A3A29A00E62C1E /* NSString+CPP.mm */; };
+		E66187CF17A3A50200E62C1E /* NSString+CPPConversors.mm in Sources */ = {isa = PBXBuildFile; fileRef = E66187BB17A3A29A00E62C1E /* NSString+CPPConversors.mm */; };
 		E66187D217A4D9E800E62C1E /* wordList.txt in Resources */ = {isa = PBXBuildFile; fileRef = E66187D117A4D9E800E62C1E /* wordList.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E66187BA17A3A29A00E62C1E /* NSString+CPP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+CPP.h"; sourceTree = "<group>"; };
-		E66187BB17A3A29A00E62C1E /* NSString+CPP.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSString+CPP.mm"; sourceTree = "<group>"; };
+		E66187BA17A3A29A00E62C1E /* NSString+CPPConversors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+CPPConversors.h"; sourceTree = "<group>"; };
+		E66187BB17A3A29A00E62C1E /* NSString+CPPConversors.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSString+CPPConversors.mm"; sourceTree = "<group>"; };
 		E66187C117A3A49B00E62C1E /* string_trieTests.xctest */ = {isa = PBXFileReference; explicitFileType = folder; includeInIndex = 0; path = string_trieTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E66187C517A3A49B00E62C1E /* string_trieTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "string_trieTests-Info.plist"; sourceTree = "<group>"; };
 		E66187C717A3A49B00E62C1E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -93,8 +93,8 @@
 			children = (
 				E6C95E4417A20BA80003B69B /* string_trie.hpp */,
 				E6C95E4617A20BA80003B69B /* string_trie.tpp */,
-				E66187BA17A3A29A00E62C1E /* NSString+CPP.h */,
-				E66187BB17A3A29A00E62C1E /* NSString+CPP.mm */,
+				E66187BA17A3A29A00E62C1E /* NSString+CPPConversors.h */,
+				E66187BB17A3A29A00E62C1E /* NSString+CPPConversors.mm */,
 			);
 			path = string_trie;
 			sourceTree = "<group>";
@@ -163,7 +163,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E66187CA17A3A49B00E62C1E /* string_trieTests.mm in Sources */,
-				E66187CF17A3A50200E62C1E /* NSString+CPP.mm in Sources */,
+				E66187CF17A3A50200E62C1E /* NSString+CPPConversors.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,7 +1,7 @@
-#import "NSString+CPP.h"
+#import "NSString+CPPConversors.h"
 
 
-@implementation NSString (CPP)
+@implementation NSString (CPPConversors)
 
 - (std::basic_string<unichar>)cppString {
 	NSUInteger length = [self length];
