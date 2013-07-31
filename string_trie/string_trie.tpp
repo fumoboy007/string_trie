@@ -3,6 +3,7 @@
 #include <cassert>
 #include <stdexcept>
 #include <stack>
+#include <utility>
 
 
 template<typename charT, charT reservedChar>
