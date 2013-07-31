@@ -2,6 +2,7 @@
 #define _STRING_TRIE_H_
 
 #include <string>
+#include <vector>
 
 
 template<typename charT, charT reservedChar>
@@ -23,8 +24,11 @@ public:
 	
 	bool contains(std::basic_string<charT> string) const;
 	
+	
 #ifdef DEBUG
 	void printStructure() const;
+	
+	void verifyStructure() const;
 #endif
 	
 private:
@@ -34,18 +38,21 @@ private:
 	node* root_;
 	
 	
-	node* search(const std::basic_string<charT>& string) const;
+	std::vector<node*> search(const std::basic_string<charT>& string) const;
+	
+	node* siblingOfNewInternalNode(size_t compareIndex, const std::vector<node*>& nodesInSearchPath, node** parentRef) const;
 	
 	static size_t indexOfFirstDifference(const std::basic_string<charT>& string1, const std::basic_string<charT>& string2);
-	node* siblingOfNewInternalNode(node* start, size_t compareIndex) const;
 	
 	static void normalizeString(std::basic_string<charT>& string);
 	
-	static node* copyNode(const node& node, const struct node* parent);
 	static void swap(string_trie& trie1, string_trie& trie2);
+	
 	
 #ifdef DEBUG
 	void printNode(const node& node) const;
+	
+	void verifyNode(const node& node, size_t compareIndex, const std::basic_string<charT>& path) const;
 #endif
 };
 

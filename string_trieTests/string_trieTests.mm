@@ -87,58 +87,68 @@
 - (void)testAll {
 	self.trie->insert([@"hello world" cppString]);
 	self.trie->printStructure();
+	self.trie->verifyStructure();
 	XCTAssert(self.trie->contains([@"hello world" cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", @"hello world", @"hello world");
 	XCTAssertFalse(self.trie->contains([@"hello worl" cppString]), @"contains(\"%@\") returned true when it should have been false.", @"hello worl");
 	XCTAssertFalse(self.trie->contains([@"hello worldd" cppString]), @"contains(\"%@\") returned true when it should have been false.", @"hello worldd");
 	
 	self.trie->remove([@"hello world" cppString]);
 	self.trie->printStructure();
+	self.trie->verifyStructure();
 	XCTAssertFalse(self.trie->contains([@"hello world" cppString]), @"contains(\"%@\") returned true even after \"%@\" was removed.", @"hello world", @"hello world");
 	
 	self.trie->insert([@"hello" cppString]);
 	self.trie->insert([@"hello world" cppString]);
 	self.trie->printStructure();
+	self.trie->verifyStructure();
 	XCTAssert(self.trie->contains([@"hello" cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", @"hello", @"hello");
 	XCTAssert(self.trie->contains([@"hello world" cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", @"hello world", @"hello world");
 	XCTAssertFalse(self.trie->contains([@"hello " cppString]), @"contains(\"%@\") returned true when it should have been false.", @"hello ");
 	
 	self.trie->insert([@"he said she said" cppString]);
 	self.trie->printStructure();
+	self.trie->verifyStructure();
 	XCTAssert(self.trie->contains([@"he said she said" cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", @"he said she said", @"he said she said");
 	XCTAssert(self.trie->contains([@"hello" cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", @"hello", @"hello");
 	XCTAssert(self.trie->contains([@"hello world" cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", @"hello world", @"hello world");
 	
 	self.trie->remove([@"hello " cppString]);
 	self.trie->printStructure();
+	self.trie->verifyStructure();
 	XCTAssert(self.trie->contains([@"he said she said" cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", @"he said she said", @"he said she said");
 	XCTAssert(self.trie->contains([@"hello" cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", @"hello", @"hello");
 	XCTAssert(self.trie->contains([@"hello world" cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", @"hello world", @"hello world");
 	
 	self.trie->remove([@"hello" cppString]);
 	self.trie->printStructure();
+	self.trie->verifyStructure();
 	XCTAssertFalse(self.trie->contains([@"hello" cppString]), @"contains(\"%@\") returned true even after \"%@\" was removed.", @"hello", @"hello");
 	XCTAssert(self.trie->contains([@"he said she said" cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", @"he said she said", @"he said she said");
 	XCTAssert(self.trie->contains([@"hello world" cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", @"hello world", @"hello world");
 	
 	self.trie->insert([@"what's up" cppString]);
 	self.trie->printStructure();
+	self.trie->verifyStructure();
 	XCTAssert(self.trie->contains([@"what's up" cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", @"what's up", @"what's up");
 	XCTAssert(self.trie->contains([@"he said she said" cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", @"he said she said", @"he said she said");
 	XCTAssert(self.trie->contains([@"hello world" cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", @"hello world", @"hello world");
 	
 	self.trie->remove([@"what's up" cppString]);
 	self.trie->printStructure();
+	self.trie->verifyStructure();
 	XCTAssertFalse(self.trie->contains([@"what's up" cppString]), @"contains(\"%@\") returned true even after \"%@\" was removed.", @"what's up", @"what's up");
 	XCTAssert(self.trie->contains([@"he said she said" cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", @"he said she said", @"he said she said");
 	XCTAssert(self.trie->contains([@"hello world" cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", @"hello world", @"hello world");
 	
 	self.trie->remove([@"hello world" cppString]);
 	self.trie->printStructure();
+	self.trie->verifyStructure();
 	XCTAssertFalse(self.trie->contains([@"hello world" cppString]), @"contains(\"%@\") returned true even after \"%@\" was removed.", @"hello world", @"hello world");
 	XCTAssert(self.trie->contains([@"he said she said" cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", @"he said she said", @"he said she said");
 	
 	self.trie->remove([@"he said she said" cppString]);
 	self.trie->printStructure();
+	self.trie->verifyStructure();
 	XCTAssertFalse(self.trie->contains([@"he said she said" cppString]), @"contains(\"%@\") returned true even after \"%@\" was removed.", @"he said she said", @"he said she said");
 }
 
@@ -147,13 +157,83 @@
 	
 	XCTAssert([wordList length] > 0, @"Word list not being loaded.");
 	
-	[wordList enumerateLinesUsingBlock:^(NSString *word, BOOL *stop) {
-		self.trie->insert([word cppString]);
-	}];
+	NSMutableSet *words = [NSMutableSet set];
 	
 	[wordList enumerateLinesUsingBlock:^(NSString *word, BOOL *stop) {
-		XCTAssert(self.trie->contains([word cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", word, word);
+		self.trie->insert([word cppString]);
+		
+		[words addObject:word];
 	}];
+	
+	self.trie->verifyStructure();
+	
+	for (NSString *word in words) {
+		XCTAssert(self.trie->contains([word cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", word, word);
+	};
+	
+	
+	NSMutableArray *remainingWords = [NSMutableArray array];
+	
+	for (NSString *word in words) {
+		u_int32_t variate = arc4random_uniform(4);
+		
+		if (variate == 0) {
+			self.trie->remove([word cppString]);
+		} else {
+			[remainingWords addObject:word];
+		}
+	}
+	
+	self.trie->verifyStructure();
+	
+	for (NSString *word in remainingWords) {
+		XCTAssert(self.trie->contains([word cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", word, word);
+	}
+}
+
+- (void)testCopyAssignmentMove {
+	NSString *wordList = [NSString stringWithContentsOfFile:@"/Users/darrenmo/Developer/Open Source/string_trie/string_trieTests/wordList.txt" encoding:NSUTF8StringEncoding error:NULL];
+	
+	XCTAssert([wordList length] > 0, @"Word list not being loaded.");
+	
+	NSMutableSet *words = [NSMutableSet set];
+	
+	[wordList enumerateLinesUsingBlock:^(NSString *word, BOOL *stop) {
+		self.trie->insert([word cppString]);
+		
+		[words addObject:word];
+	}];
+	
+	
+	auto copy = new string_trie<unichar, '\n'>(*self.trie);
+	
+	delete self.trie;
+	self.trie = nullptr;
+	
+	for (NSString *word in words) {
+		XCTAssert(copy->contains([word cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", word, word);
+	}
+	
+	
+	self.trie = new string_trie<unichar, '\n'>();
+	*self.trie = *copy;
+	
+	delete copy;
+	copy = nullptr;
+	
+	for (NSString *word in words) {
+		XCTAssert(self.trie->contains([word cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", word, word);
+	}
+	
+	
+	copy = new string_trie<unichar, '\n'>(string_trie<unichar, '\n'>(*self.trie));
+	
+	delete self.trie;
+	self.trie = copy;
+	
+	for (NSString *word in words) {
+		XCTAssert(self.trie->contains([word cppString]), @"contains(\"%@\") returned false even after \"%@\" was inserted.", word, word);
+	}
 }
 
 - (void)testNSToCPPStringConversion {
