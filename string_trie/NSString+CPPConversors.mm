@@ -3,6 +3,15 @@
 
 @implementation NSString (CPPConversors)
 
+- (instancetype)initWithCPPString:(const std::basic_string<unichar>&)cppString {
+	return [self initWithCharacters:cppString.c_str() length:cppString.length()];
+}
+
++ (instancetype)stringFromCPPString:(const std::basic_string<unichar>&)cppString {
+	return [[[self class] alloc] initWithCPPString:cppString];
+}
+
+
 - (std::basic_string<unichar>)cppString {
 	NSUInteger length = [self length];
 	
