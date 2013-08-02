@@ -2,6 +2,10 @@
 
 #import "NSString+CPPConversors.h"
 
+#include <algorithm>
+#include <vector>
+#include <sstream>
+
 #include "string_trie.hpp"
 
 
@@ -27,6 +31,28 @@
 	[super tearDown];
 }
 
+- (void)testNSCPPConversors {
+	NSString *string = @"hello world";
+	
+	
+	auto cppString = [string cppString];
+	
+	XCTAssert(cppString.length() == [string length], @"CPP string is not the same length as Cocoa string.");
+	
+	for (int i = 0; i < cppString.length(); i++) {
+		XCTAssert(cppString[i] == [string characterAtIndex:i], @"Characters at index %d do not match.", i);
+	}
+	
+	
+	NSString *newString = [NSString stringWithCPPString:cppString];
+	
+	XCTAssert(cppString.length() == [newString length], @"Cocoa string is not the same length as CPP string.");
+	
+	for (int i = 0; i < [newString length]; i++) {
+		XCTAssert(cppString[i] == [newString characterAtIndex:i], @"Characters at index %d do not match.", i);
+	}
+}
+
 - (void)testInvalidString {
 	std::basic_string<unichar> string = [@"hello\nworld" cppString];
 	
@@ -39,38 +65,64 @@
 			try {
 				self.trie->contains(string);
 			} catch (const std::invalid_argument& exception) {
-				string = [@"hello world" cppString];
-				
 				try {
-					self.trie->insert(string);
-					self.trie->remove(string);
-					self.trie->contains(string);
-				} catch (const std::invalid_argument& exception) {
-					XCTFail(@"Inserting, removing, or searching for a valid string threw an exception.");
-				}
-				
-				
-				string = [@"" cppString];
-				
-				try {
-					self.trie->insert(string);
+					self.trie->predecessor(string);
 				} catch (const std::invalid_argument& exception) {
 					try {
-						self.trie->remove(string);
+						self.trie->successor(string);
 					} catch (const std::invalid_argument& exception) {
+						string = [@"hello world" cppString];
+						
 						try {
+							self.trie->insert(string);
+							self.trie->remove(string);
 							self.trie->contains(string);
+							self.trie->predecessor(string);
+							self.trie->successor(string);
 						} catch (const std::invalid_argument& exception) {
-							return;
+							XCTFail(@"Inserting, removing, or searching for a valid string threw an exception.");
 						}
 						
-						XCTFail(@"Searching for an empty string does not throw an exception.");
+						
+						string = [@"" cppString];
+						
+						try {
+							self.trie->insert(string);
+						} catch (const std::invalid_argument& exception) {
+							try {
+								self.trie->remove(string);
+							} catch (const std::invalid_argument& exception) {
+								try {
+									self.trie->contains(string);
+								} catch (const std::invalid_argument& exception) {
+									try {
+										self.trie->predecessor(string);
+									} catch (const std::invalid_argument& exception) {
+										try {
+											self.trie->successor(string);
+										} catch (const std::invalid_argument& exception) {
+											return;
+										}
+										
+										XCTFail(@"Finding the successor of an empty string does not throw an exception.");
+									}
+									
+									XCTFail(@"Finding the predecessor of an empty string does not throw an exception.");
+								}
+								
+								XCTFail(@"Searching for an empty string does not throw an exception.");
+							}
+							
+							XCTFail(@"Removing an empty string does not throw an exception.");
+						}
+						
+						XCTFail(@"Inserting an empty string does not throw an exception.");
 					}
 					
-					XCTFail(@"Removing an empty string does not throw an exception.");
+					XCTFail(@"Finding the successor of a string that contains the reserved character does not throw an exception.");
 				}
 				
-				XCTFail(@"Inserting an empty string does not throw an exception.");
+				XCTFail(@"Finding the predecessor of a string that contains the reserved character does not throw an exception.");
 			}
 			
 			XCTFail(@"Searching for a string that contains the reserved character does not throw an exception.");
@@ -82,7 +134,7 @@
 	XCTFail(@"Inserting a string that contains the reserved character does not throw an exception.");
 }
 
-- (void)testAll {
+- (void)testInsertRemoveContains {
 	self.trie->insert([@"hello world" cppString]);
 	self.trie->printStructure();
 	self.trie->verifyStructure();
@@ -234,27 +286,64 @@
 	}
 }
 
-- (void)testNSToCPPStringConversion {
-	NSString *string = @"hello world";
+- (void)testIterators {
+	NSString *wordList = [NSString stringWithContentsOfFile:@"/Users/darrenmo/Developer/Open Source/string_trie/string_trieTests/wordList.txt" encoding:NSUTF8StringEncoding error:NULL];
 	
-	{
-		auto cppString = [string cppString];
+	XCTAssert([wordList length] > 0, @"Word list not being loaded.");
+	
+	NSMutableSet *words = [NSMutableSet set];
+	
+	[wordList enumerateLinesUsingBlock:^(NSString *word, BOOL *stop) {
+		self.trie->insert([word cppString]);
 		
-		XCTAssert(cppString.length() == [string length], @"CPP string is not the same length as Cocoa string.");
+		[words addObject:word];
+	}];
+	
+	
+	using namespace std;
+	
+	vector<basic_string<unichar>> strings;
+	
+	copy(self.trie->cbegin(), self.trie->cend(), back_inserter(strings));
+	
+	XCTAssert(strings.size() == [words count], @"Number of outputted strings (%lu) not equal to number of inputted strings (%lu).", strings.size(), [words count]);
+	
+	for (auto& string : strings) {
+		self.trie->remove(string);
 		
-		for (int i = 0; i < cppString.length(); i++) {
-			XCTAssert(cppString[i] == [string characterAtIndex:i], @"Characters at index %d do not match.", i);
-		}
+		NSString *cocoaString = [NSString stringWithCPPString:string];
+		
+		XCTAssert([words containsObject:cocoaString], @"\"%@\" not in collection of inputted strings.", cocoaString);
 	}
 	
-	{
-		auto cppString = [string cppString];
-		
-		XCTAssert(cppString.length() == [string length], @"CPP string is not the same length as Cocoa string.");
-		
-		for (int i = 0; i < cppString.length(); i++) {
-			XCTAssert(cppString[i] == [string characterAtIndex:i], @"Characters at index %d do not match.", i);
-		}
+	
+	strings.clear();
+	
+	for (NSString *word in words) {
+		strings.push_back([word cppString]);
+	}
+	
+	copy(strings.begin(), strings.end(), self.trie->inserter());
+	
+	
+	NSMutableString *output = [NSMutableString string];
+	
+	for_each(self.trie->cbegin(), self.trie->cend(), [&](const std::basic_string<unichar>& word) {
+		[output appendString:[NSString stringWithCPPString:word]];
+		[output appendString:@"\n"];
+	});
+	
+	[output writeToFile:@"/Users/darrenmo/Developer/Open Source/string_trie/string_trieTests/wordList (output).txt" atomically:YES encoding:NSUTF8StringEncoding error:NULL];
+	
+	
+	strings.clear();
+	
+	copy(self.trie->cbegin(), self.trie->cend(), back_inserter(strings));
+	
+	XCTAssert(strings.size() == [words count], @"Number of strings in trie (%lu) not equal to number of inputted strngs (%lu).", strings.size(), [words count]);
+	
+	for (NSString *word in words) {
+		XCTAssert(self.trie->contains([word cppString]), @"\"%@\" not found in trie.", word);
 	}
 }
 

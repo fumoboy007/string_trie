@@ -17,7 +17,7 @@
 /* Begin PBXFileReference section */
 		E66187BA17A3A29A00E62C1E /* NSString+CPPConversors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+CPPConversors.h"; sourceTree = "<group>"; };
 		E66187BB17A3A29A00E62C1E /* NSString+CPPConversors.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSString+CPPConversors.mm"; sourceTree = "<group>"; };
-		E66187C117A3A49B00E62C1E /* string_trieTests.xctest */ = {isa = PBXFileReference; explicitFileType = folder; includeInIndex = 0; path = string_trieTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E66187C117A3A49B00E62C1E /* string_trieTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = string_trieTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E66187C517A3A49B00E62C1E /* string_trieTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "string_trieTests-Info.plist"; sourceTree = "<group>"; };
 		E66187C717A3A49B00E62C1E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E66187C917A3A49B00E62C1E /* string_trieTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = string_trieTests.mm; sourceTree = "<group>"; };

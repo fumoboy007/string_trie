@@ -1,4 +1,4 @@
-#include <unordered_map>
+#include <map>
 #include <algorithm>
 #include <cassert>
 #include <stdexcept>
@@ -6,9 +6,108 @@
 #include <utility>
 
 
+/* string_trie_const_iterator */
+
+template<typename charT, charT reservedChar>
+string_trie_const_iterator<charT, reservedChar>::string_trie_const_iterator() : trie_(nullptr), string_() {
+}
+
+template<typename charT, charT reservedChar>
+string_trie_const_iterator<charT, reservedChar>::string_trie_const_iterator(const string_trie<charT, reservedChar>& trie) : string_trie_const_iterator(trie, std::basic_string<charT>()) {
+}
+
+template<typename charT, charT reservedChar>
+string_trie_const_iterator<charT, reservedChar>::string_trie_const_iterator(const string_trie<charT, reservedChar>& trie, const std::basic_string<charT>& string) : trie_(&trie), string_(string) {
+	size_t position = string_.rfind(reservedChar);
+	
+	if (position != std::basic_string<charT>::npos) string_.erase(position, 1);
+	
+	assert(string_.rfind(reservedChar) == std::basic_string<charT>::npos);
+}
+
+
+template<typename charT, charT reservedChar>
+std::basic_string<charT> string_trie_const_iterator<charT, reservedChar>::operator*() {
+	return string_;
+}
+
+template<typename charT, charT reservedChar>
+string_trie_const_iterator<charT, reservedChar>& string_trie_const_iterator<charT, reservedChar>::operator++() {
+	if (trie_ && !pastEnd()) *this = trie_->successor(string_);
+	
+	return *this;
+}
+
+template<typename charT, charT reservedChar>
+string_trie_const_iterator<charT, reservedChar> string_trie_const_iterator<charT, reservedChar>::operator++(int i) {
+	string_trie_const_iterator tmp = *this;
+	
+	if (trie_ && !pastEnd()) *this = trie_->successor(string_);
+	
+	return tmp;
+}
+
+
+template<typename charT, charT reservedChar>
+bool string_trie_const_iterator<charT, reservedChar>::pastEnd() const {
+	return string_.length() == 0;
+}
+
+
+template<typename charT, charT reservedChar>
+bool operator==(const string_trie_const_iterator<charT, reservedChar>& iterator1, const string_trie_const_iterator<charT, reservedChar>& iterator2) {
+	return iterator1.trie_ == iterator2.trie_ && iterator1.string_ == iterator2.string_;
+}
+
+template<typename charT, charT reservedChar>
+bool operator!=(const string_trie_const_iterator<charT, reservedChar>& iterator1, const string_trie_const_iterator<charT, reservedChar>& iterator2) {
+	return !(iterator1 == iterator2);
+}
+
+
+/* string_trie_insert_iterator */
+
+template<typename charT, charT reservedChar>
+string_trie_insert_iterator<charT, reservedChar>::string_trie_insert_iterator(string_trie<charT, reservedChar>& trie) : trie_(&trie) {
+}
+
+
+template<typename charT, charT reservedChar>
+string_trie_insert_iterator<charT, reservedChar>& string_trie_insert_iterator<charT, reservedChar>::operator=(const std::basic_string<charT>& string) {
+	trie_->insert(string);
+	
+	return *this;
+}
+
+template<typename charT, charT reservedChar>
+string_trie_insert_iterator<charT, reservedChar>& string_trie_insert_iterator<charT, reservedChar>::operator=(std::basic_string<charT>&& string) {
+	trie_->insert(string);
+	
+	return *this;
+}
+
+
+template<typename charT, charT reservedChar>
+string_trie_insert_iterator<charT, reservedChar>& string_trie_insert_iterator<charT, reservedChar>::operator*() {
+	return *this;
+}
+
+template<typename charT, charT reservedChar>
+string_trie_insert_iterator<charT, reservedChar>& string_trie_insert_iterator<charT, reservedChar>::operator++() {
+	return *this;
+}
+
+template<typename charT, charT reservedChar>
+string_trie_insert_iterator<charT, reservedChar> string_trie_insert_iterator<charT, reservedChar>::operator++(int i) {
+	return *this;
+}
+
+
+/* string_trie */
+
 template<typename charT, charT reservedChar>
 struct string_trie<charT, reservedChar>::node {
-	typedef std::unordered_map<charT, node*> child_map;
+	typedef std::map<charT, node*> child_map;
 	
 	
 	std::basic_string<charT> string;
@@ -110,6 +209,38 @@ string_trie<charT, reservedChar>& string_trie<charT, reservedChar>::operator=(st
 	swap(*this, otherTrie);
 	
 	return *this;
+}
+
+template<typename charT, charT reservedChar>
+string_trie<charT, reservedChar>& string_trie<charT, reservedChar>::operator=(string_trie&& otherTrie) {
+	swap(*this, otherTrie);
+	
+	return *this;
+}
+
+
+template<typename charT, charT reservedChar>
+auto string_trie<charT, reservedChar>::cbegin() const -> const_iterator {
+	if (root_) {
+		const node* node = leftmostDescendant(*root_);
+		
+		// Remove last character (reserved character)
+		auto string = node->string.substr(0, node->string.length() - 1);
+		
+		return const_iterator(*this, string);
+	} else {
+		return cend();
+	}
+}
+
+template<typename charT, charT reservedChar>
+auto string_trie<charT, reservedChar>::cend() const -> const_iterator {
+	return const_iterator(*this);
+}
+
+template<typename charT, charT reservedChar>
+auto string_trie<charT, reservedChar>::inserter() -> insert_iterator {
+	return insert_iterator(*this);
 }
 
 
@@ -236,6 +367,103 @@ bool string_trie<charT, reservedChar>::contains(std::basic_string<charT> string)
 	return !nodes.empty() && nodes.back()->string == string;
 }
 
+
+template<typename charT, charT reservedChar>
+auto string_trie<charT, reservedChar>::predecessor(std::basic_string<charT> string) const -> const_iterator {
+	normalizeString(string);
+	
+	
+	std::vector<node*> nodes = search(string);
+	
+	if (nodes.empty()) return const_iterator(*this);
+	
+	
+	node* last = nodes.back();
+	nodes.pop_back();
+	
+	// If node's string is less than our string, then its rightmost descendant is what we want
+	if (string.compare(last->string) > 0) return const_iterator(*this, rightmostDescendant(*last)->string);
+	
+	
+	node* previousNode = last;
+	node* desiredNode = nullptr;
+	
+	for (auto i = nodes.rbegin(); i != nodes.rend(); i++) {
+		node* node = *i;
+		assert(!node->isLeaf);
+		
+		
+		// Get iterator pointing to edge going down to previous node
+		const charT& character = previousNode->string[node->compareIndex];
+		auto iter = node->children.find(character);
+		
+		assert(iter != node->children.end());
+		
+		
+		// Get the preceding node if present
+		if (iter != node->children.begin()) {
+			iter--;
+			
+			if (string.compare(iter->second->string) > 0) {
+				desiredNode = iter->second;
+				
+				break;
+			}
+		}
+		
+		previousNode = node;
+	}
+	
+	if (!desiredNode) return const_iterator(*this);
+	
+	return const_iterator(*this, rightmostDescendant(*desiredNode)->string);
+}
+
+template<typename charT, charT reservedChar>
+auto string_trie<charT, reservedChar>::successor(std::basic_string<charT> string) const -> const_iterator {
+	normalizeString(string);
+	
+	
+	std::vector<node*> nodes = search(string);
+	
+	if (nodes.empty()) return const_iterator(*this);
+	
+	
+	node* last = nodes.back();
+	nodes.pop_back();
+	
+	// If node's string is greater than our string, then its leftmost descendant is what we want
+	if (string.compare(last->string) < 0) return const_iterator(*this, leftmostDescendant(*last)->string);
+	
+	
+	node* previousNode = last;
+	node* desiredNode = nullptr;
+	
+	for (auto i = nodes.rbegin(); i != nodes.rend(); i++) {
+		node* node = *i;
+		assert(!node->isLeaf);
+		
+		
+		// Get iterator pointing to edge following edge going down to previous node
+		const charT& character = previousNode->string[node->compareIndex];
+		auto iter = node->children.upper_bound(character);
+		
+		
+		if (iter != node->children.end() && string.compare(iter->second->string) < 0) {
+			desiredNode = iter->second;
+			
+			break;
+		}
+		
+		previousNode = node;
+	}
+	
+	if (!desiredNode) return const_iterator(*this);
+	
+	return const_iterator(*this, leftmostDescendant(*desiredNode)->string);
+}
+
+
 template<typename charT, charT reservedChar>
 auto string_trie<charT, reservedChar>::search(const std::basic_string<charT>& string) const -> std::vector<node*> {
 	std::vector<node*> nodes;
@@ -263,6 +491,29 @@ auto string_trie<charT, reservedChar>::search(const std::basic_string<charT>& st
 	}
 	
 	return nodes;
+}
+
+
+template<typename charT, charT reservedChar>
+auto string_trie<charT, reservedChar>::leftmostDescendant(const node& root) const -> const node* {
+	const node* node = &root;
+	
+	while (!node->isLeaf) {
+		node = node->children.begin()->second;
+	}
+	
+	return node;
+}
+
+template<typename charT, charT reservedChar>
+auto string_trie<charT, reservedChar>::rightmostDescendant(const node& root) const -> const node* {
+	const node* node = &root;
+	
+	while (!node->isLeaf) {
+		node = (--node->children.end())->second;
+	}
+	
+	return node;
 }
 
 
