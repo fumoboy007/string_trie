@@ -110,6 +110,8 @@ struct string_trie<charT, reservedChar>::node {
 	typedef std::map<charT, node*> child_map;
 	
 	
+	string_trie* trie_;
+	
 	std::basic_string<charT> string;
 	
 	bool isLeaf;
@@ -118,10 +120,16 @@ struct string_trie<charT, reservedChar>::node {
 	
 	
 	// Internal node constructor
-	node(size_t compareIndex, const std::basic_string<charT>& path) : string(path), isLeaf(false), compareIndex(compareIndex), children() {}
+	node(size_t compareIndex, const std::basic_string<charT>& path) : trie_(nullptr), string(path), isLeaf(false), compareIndex(compareIndex), children() {}
 	
 	// Leaf node constructor
-	node(const std::basic_string<charT>& string) : string(string), isLeaf(true), compareIndex(0), children() {}
+	node(string_trie& trie, const std::basic_string<charT>& string) : trie_(&trie), string(string), isLeaf(true), compareIndex(0), children() {
+		trie_->size_++;
+	}
+	
+	~node() {
+		if (isLeaf) trie_->size_--;
+	}
 	
 private:
 	node(const node& otherNode);
@@ -132,11 +140,11 @@ private:
 
 
 template<typename charT, charT reservedChar>
-string_trie<charT, reservedChar>::string_trie() : root_(nullptr) {
+string_trie<charT, reservedChar>::string_trie() : root_(nullptr), size_(0) {
 }
 
 template<typename charT, charT reservedChar>
-string_trie<charT, reservedChar>::string_trie(const string_trie& otherTrie) : root_(nullptr) {
+string_trie<charT, reservedChar>::string_trie(const string_trie& otherTrie) : string_trie() {
 	// Avoid recursion as we may have very many levels
 	std::stack<node*> nodes;
 	
@@ -144,7 +152,7 @@ string_trie<charT, reservedChar>::string_trie(const string_trie& otherTrie) : ro
 	
 	if (otherRoot) {
 		if (otherRoot->isLeaf) {
-			root_ = new node(otherRoot->string);
+			root_ = new node(*this, otherRoot->string);
 		} else {
 			root_ = new node(otherRoot->compareIndex, otherRoot->string);
 			root_->children = otherRoot->children;
@@ -163,7 +171,7 @@ string_trie<charT, reservedChar>::string_trie(const string_trie& otherTrie) : ro
 			struct node* copy;
 			
 			if (otherNode->isLeaf) {
-				copy = new struct node(otherNode->string);
+				copy = new struct node(*this, otherNode->string);
 			} else {
 				copy = new struct node(otherNode->compareIndex, otherNode->string);
 				copy->children = otherNode->children;
@@ -184,23 +192,7 @@ string_trie<charT, reservedChar>::string_trie(string_trie&& otherTrie) : string_
 
 template<typename charT, charT reservedChar>
 string_trie<charT, reservedChar>::~string_trie() {
-	// Avoid recursion as we may have very many levels
-	std::stack<node*> nodes;
-	
-	if (root_) nodes.push(root_);
-	
-	while (!nodes.empty()) {
-		node* node = nodes.top();
-		nodes.pop();
-		
-		if (!node->isLeaf) {
-			for (const auto& element : node->children) {
-				nodes.push(element.second);
-			}
-		}
-		
-		delete node;
-	}
+	clear();
 }
 
 
@@ -245,6 +237,38 @@ auto string_trie<charT, reservedChar>::inserter() -> insert_iterator {
 
 
 template<typename charT, charT reservedChar>
+void string_trie<charT, reservedChar>::clear() {
+	// Avoid recursion as we may have very many levels
+	std::stack<node*> nodes;
+	
+	if (root_) nodes.push(root_);
+	
+	while (!nodes.empty()) {
+		node* node = nodes.top();
+		nodes.pop();
+		
+		if (!node->isLeaf) {
+			for (const auto& element : node->children) {
+				nodes.push(element.second);
+			}
+		}
+		
+		delete node;
+	}
+}
+
+template<typename charT, charT reservedChar>
+bool string_trie<charT, reservedChar>::empty() const {
+	return size_ == 0;
+}
+
+template<typename charT, charT reservedChar>
+size_t string_trie<charT, reservedChar>::size() const {
+	return size_;
+}
+
+
+template<typename charT, charT reservedChar>
 void string_trie<charT, reservedChar>::insert(std::basic_string<charT> string) {
 	normalizeString(string);
 	
@@ -263,7 +287,7 @@ void string_trie<charT, reservedChar>::insert(std::basic_string<charT> string) {
 			if (!node->isLeaf && compareIndex == node->string.size() - 1) {  // if node is where we should insert new leaf
 				const charT& character = string[compareIndex];
 				
-				node->children[character] = new struct node(string);
+				node->children[character] = new struct node(*this, string);
 			} else {  // else, create new internal node and insert it at appropriate position along path
 				struct node* parentOfInternal;
 				struct node* siblingOfInternal = siblingOfNewInternalNode(compareIndex, nodes, &parentOfInternal);
@@ -277,7 +301,7 @@ void string_trie<charT, reservedChar>::insert(std::basic_string<charT> string) {
 				
 				// Set new leaf node as child of new internal node
 				const charT& newNodeCharacter = string[compareIndex];
-				internal->children[newNodeCharacter] = new struct node(string);
+				internal->children[newNodeCharacter] = new struct node(*this, string);
 				
 				// Set original parent of existing node as parent of internal node
 				if (parentOfInternal) {
@@ -290,7 +314,7 @@ void string_trie<charT, reservedChar>::insert(std::basic_string<charT> string) {
 			}
 		}
 	} else {
-		root_ = new struct node(string);
+		root_ = new struct node(*this, string);
 	}
 }
 
@@ -510,7 +534,7 @@ auto string_trie<charT, reservedChar>::rightmostDescendant(const node& root) con
 	const node* node = &root;
 	
 	while (!node->isLeaf) {
-		node = (--node->children.end())->second;
+		node = node->children.rbegin()->second;
 	}
 	
 	return node;
@@ -563,6 +587,7 @@ void string_trie<charT, reservedChar>::swap(string_trie<charT, reservedChar>& tr
 	using std::swap;
 	
 	swap(trie1.root_, trie2.root_);
+	swap(trie1.size_, trie2.size_);
 }
 
 

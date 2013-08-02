@@ -42,6 +42,11 @@ public:
 	insert_iterator inserter();
 	
 	
+	void clear();
+	bool empty() const;
+	size_t size() const;
+	
+	
 	/* The following throw std::invalid_argument if string contains reservedChar or is empty. */
 	
 	void insert(std::basic_string<charT> string);
@@ -64,6 +69,8 @@ private:
 	
 	
 	node* root_;
+	
+	size_t size_;
 	
 	
 	std::vector<node*> search(const std::basic_string<charT>& string) const;
