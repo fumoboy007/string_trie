@@ -7,7 +7,7 @@
 	return [self initWithCharacters:cppString.c_str() length:cppString.length()];
 }
 
-+ (instancetype)stringFromCPPString:(const std::basic_string<unichar>&)cppString {
++ (instancetype)stringWithCPPString:(const std::basic_string<unichar>&)cppString {
 	return [[[self class] alloc] initWithCPPString:cppString];
 }
 
