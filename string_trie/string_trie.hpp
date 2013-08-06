@@ -57,6 +57,8 @@ public:
 	const_iterator predecessor(std::basic_string<charT> string) const;
 	const_iterator successor(std::basic_string<charT> string) const;
 	
+	std::pair<const_iterator, const_iterator> prefixedStrings(std::basic_string<charT> prefix) const;
+	
 	
 #ifdef DEBUG
 	void printStructure() const;

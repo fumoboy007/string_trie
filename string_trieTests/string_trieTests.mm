@@ -71,52 +71,65 @@
 					try {
 						self.trie->successor(string);
 					} catch (const std::invalid_argument& exception) {
-						string = [@"hello world" cppString];
-						
 						try {
-							self.trie->insert(string);
-							self.trie->remove(string);
-							self.trie->contains(string);
-							self.trie->predecessor(string);
-							self.trie->successor(string);
+							self.trie->prefixedStrings(string);
 						} catch (const std::invalid_argument& exception) {
-							XCTFail(@"Inserting, removing, or searching for a valid string threw an exception.");
-						}
-						
-						
-						string = [@"" cppString];
-						
-						try {
-							self.trie->insert(string);
-						} catch (const std::invalid_argument& exception) {
+							string = [@"hello world" cppString];
+							
 							try {
+								self.trie->insert(string);
 								self.trie->remove(string);
+								self.trie->contains(string);
+								self.trie->predecessor(string);
+								self.trie->successor(string);
+								self.trie->prefixedStrings(string);
 							} catch (const std::invalid_argument& exception) {
-								try {
-									self.trie->contains(string);
-								} catch (const std::invalid_argument& exception) {
-									try {
-										self.trie->predecessor(string);
-									} catch (const std::invalid_argument& exception) {
-										try {
-											self.trie->successor(string);
-										} catch (const std::invalid_argument& exception) {
-											return;
-										}
-										
-										XCTFail(@"Finding the successor of an empty string does not throw an exception.");
-									}
-									
-									XCTFail(@"Finding the predecessor of an empty string does not throw an exception.");
-								}
-								
-								XCTFail(@"Searching for an empty string does not throw an exception.");
+								XCTFail(@"Inserting, removing, searching, finding the predecessor, finding the successor, or finding the prefixed strings for a valid string threw an exception.");
 							}
 							
-							XCTFail(@"Removing an empty string does not throw an exception.");
+							
+							string = [@"" cppString];
+							
+							try {
+								self.trie->insert(string);
+							} catch (const std::invalid_argument& exception) {
+								try {
+									self.trie->remove(string);
+								} catch (const std::invalid_argument& exception) {
+									try {
+										self.trie->contains(string);
+									} catch (const std::invalid_argument& exception) {
+										try {
+											self.trie->predecessor(string);
+										} catch (const std::invalid_argument& exception) {
+											try {
+												self.trie->successor(string);
+											} catch (const std::invalid_argument& exception) {
+												try {
+													self.trie->prefixedStrings(string);
+												} catch (const std::invalid_argument& exception) {
+													return;
+												}
+												
+												XCTFail(@"Finding the prefixed strings for an empty string does not throw an exception.");
+											}
+											
+											XCTFail(@"Finding the successor of an empty string does not throw an exception.");
+										}
+										
+										XCTFail(@"Finding the predecessor of an empty string does not throw an exception.");
+									}
+									
+									XCTFail(@"Searching for an empty string does not throw an exception.");
+								}
+								
+								XCTFail(@"Removing an empty string does not throw an exception.");
+							}
+							
+							XCTFail(@"Inserting an empty string does not throw an exception.");
 						}
-						
-						XCTFail(@"Inserting an empty string does not throw an exception.");
+							
+						XCTFail(@"Finding the prefixed strings for a string that contains the reserved character does not throw an exception.");
 					}
 					
 					XCTFail(@"Finding the successor of a string that contains the reserved character does not throw an exception.");
@@ -345,6 +358,42 @@
 	for (NSString *word in words) {
 		XCTAssert(self.trie->contains([word cppString]), @"\"%@\" not found in trie.", word);
 	}
+}
+
+- (void)testPrefixes {
+	NSString *wordList = [NSString stringWithContentsOfFile:@"/Users/darrenmo/Developer/Open Source/string_trie/string_trieTests/wordList.txt" encoding:NSUTF8StringEncoding error:NULL];
+	
+	XCTAssert([wordList length] > 0, @"Word list not being loaded.");
+	
+	NSMutableSet *words = [NSMutableSet set];
+	
+	[wordList enumerateLinesUsingBlock:^(NSString *word, BOOL *stop) {
+		self.trie->insert([word cppString]);
+		
+		[words addObject:word];
+	}];
+	
+	
+	using namespace std;
+	
+	vector<basic_string<unichar>> strings;
+	
+	copy(self.trie->cbegin(), self.trie->cend(), back_inserter(strings));
+	
+	
+	auto prefixedStrings = self.trie->prefixedStrings([@"hec" cppString]);
+	
+	size_t actualNumPrefixedStrings = count_if(self.trie->cbegin(), self.trie->cend(), [](const basic_string<unichar>& string) {
+		NSString *testString = @"hec";
+		
+		return [[[NSString stringWithCPPString:string] commonPrefixWithString:testString options:0] isEqualToString:testString];
+	});
+	
+	size_t returnedNumPrefixStrings = count_if(prefixedStrings.first, prefixedStrings.second, [](const basic_string<unichar>& string) {
+		return true;
+	});
+	
+	XCTAssert(returnedNumPrefixStrings == actualNumPrefixedStrings, @"Number of returned prefixed strings (%lu) does not match the number of actual prefixed strings (%lu).", returnedNumPrefixStrings, actualNumPrefixedStrings);
 }
 
 @end

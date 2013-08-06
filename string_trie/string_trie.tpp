@@ -493,6 +493,39 @@ auto string_trie<charT, reservedChar>::successor(std::basic_string<charT> string
 
 
 template<typename charT, charT reservedChar>
+auto string_trie<charT, reservedChar>::prefixedStrings(std::basic_string<charT> prefix) const -> std::pair<const_iterator, const_iterator> {
+	normalizeString(prefix);
+	
+	
+	std::vector<node*> nodes = search(prefix);
+	
+	if (nodes.empty()) return std::pair<const_iterator, const_iterator>(cend(), cend());
+	
+	
+	node* node = nodes.back();
+	
+	// If found node has the specified prefix
+	if (node->string.rfind(prefix, prefix.length() - 2) == std::basic_string<charT>::npos) return std::pair<const_iterator, const_iterator>(cend(), cend());
+	
+	
+	const struct node* leftmost = leftmostDescendant(*node);
+	const struct node* rightmost = rightmostDescendant(*node);
+	
+	
+	const_iterator begin = const_iterator(*this, leftmost->string);
+	
+	
+	// Get node after rightmost node
+	std::basic_string<charT> lastString = rightmost->string.substr(0, rightmost->string.length() - 1);
+	
+	const_iterator end = successor(lastString);
+	
+	
+	return std::pair<const_iterator, const_iterator>(begin, end);
+}
+
+
+template<typename charT, charT reservedChar>
 auto string_trie<charT, reservedChar>::search(const std::basic_string<charT>& string) const -> std::vector<node*> {
 	std::vector<node*> nodes;
 	
