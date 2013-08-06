@@ -78,9 +78,9 @@ private:
 	const node* leftmostDescendant(const node& root) const;
 	const node* rightmostDescendant(const node& root) const;
 	
-	node* siblingOfNewInternalNode(size_t compareIndex, const std::vector<node*>& nodesInSearchPath, node** parentRef) const;
+	node* siblingOfNewInternalNode(typename std::basic_string<charT>::size_type compareIndex, const std::vector<node*>& nodesInSearchPath, node** parentRef) const;
 	
-	static size_t indexOfFirstDifference(const std::basic_string<charT>& string1, const std::basic_string<charT>& string2);
+	static typename std::basic_string<charT>::size_type indexOfFirstDifference(const std::basic_string<charT>& string1, const std::basic_string<charT>& string2);
 	
 	static void normalizeString(std::basic_string<charT>& string);
 	
@@ -90,7 +90,7 @@ private:
 #ifdef DEBUG
 	void printNode(const node& node) const;
 	
-	void verifyNode(const node& node, size_t compareIndex, const std::basic_string<charT>& path) const;
+	void verifyNode(const node& node, typename std::basic_string<charT>::size_type compareIndex, const std::basic_string<charT>& path) const;
 #endif
 };
 

@@ -18,7 +18,7 @@ string_trie_const_iterator<charT, reservedChar>::string_trie_const_iterator(cons
 
 template<typename charT, charT reservedChar>
 string_trie_const_iterator<charT, reservedChar>::string_trie_const_iterator(const string_trie<charT, reservedChar>& trie, const std::basic_string<charT>& string) : trie_(&trie), string_(string) {
-	size_t position = string_.rfind(reservedChar);
+	typename std::basic_string<charT>::size_type position = string_.rfind(reservedChar);
 	
 	if (position != std::basic_string<charT>::npos) string_.erase(position, 1);
 	
@@ -115,12 +115,12 @@ struct string_trie<charT, reservedChar>::node {
 	std::basic_string<charT> string;
 	
 	bool isLeaf;
-	size_t compareIndex;
+	typename std::basic_string<charT>::size_type compareIndex;
 	child_map children;
 	
 	
 	// Internal node constructor
-	node(size_t compareIndex, const std::basic_string<charT>& path) : trie_(nullptr), string(path), isLeaf(false), compareIndex(compareIndex), children() {}
+	node(typename std::basic_string<charT>::size_type compareIndex, const std::basic_string<charT>& path) : trie_(nullptr), string(path), isLeaf(false), compareIndex(compareIndex), children() {}
 	
 	// Leaf node constructor
 	node(string_trie& trie, const std::basic_string<charT>& string) : trie_(&trie), string(string), isLeaf(true), compareIndex(0), children() {
@@ -128,7 +128,11 @@ struct string_trie<charT, reservedChar>::node {
 	}
 	
 	~node() {
-		if (isLeaf) trie_->size_--;
+		if (isLeaf) {
+			assert(trie_);
+			
+			trie_->size_--;
+		}
 	}
 	
 private:
@@ -278,7 +282,7 @@ void string_trie<charT, reservedChar>::insert(std::basic_string<charT> string) {
 	if (!nodes.empty()) {  // if node found
 		node* node = nodes.back();
 		
-		size_t compareIndex = indexOfFirstDifference(string, node->string);
+		typename std::basic_string<charT>::size_type compareIndex = indexOfFirstDifference(string, node->string);
 		
 		// If internal node key matched up with string, then we should compare the last index
 		if (compareIndex == std::basic_string<charT>::npos && !node->isLeaf) compareIndex = string.length() - 1;
@@ -542,7 +546,7 @@ auto string_trie<charT, reservedChar>::rightmostDescendant(const node& root) con
 
 
 template<typename charT, charT reservedChar>
-auto string_trie<charT, reservedChar>::siblingOfNewInternalNode(size_t compareIndex, const std::vector<struct node*>& nodesInSearchPath, node** parentRef) const -> node* {
+auto string_trie<charT, reservedChar>::siblingOfNewInternalNode(typename std::basic_string<charT>::size_type compareIndex, const std::vector<struct node*>& nodesInSearchPath, node** parentRef) const -> node* {
 	node* parent = nullptr;
 	node* node = nullptr;
 	
@@ -561,11 +565,11 @@ auto string_trie<charT, reservedChar>::siblingOfNewInternalNode(size_t compareIn
 
 
 template<typename charT, charT reservedChar>
-size_t string_trie<charT, reservedChar>::indexOfFirstDifference(const std::basic_string<charT>& string1, const std::basic_string<charT>& string2) {
-	size_t length1 = string1.length();
-	size_t length2 = string2.length();
+typename std::basic_string<charT>::size_type string_trie<charT, reservedChar>::indexOfFirstDifference(const std::basic_string<charT>& string1, const std::basic_string<charT>& string2) {
+	typename std::basic_string<charT>::size_type length1 = string1.length();
+	typename std::basic_string<charT>::size_type length2 = string2.length();
 	
-	for (size_t i = 0; i < length1 && i < length2; i++) {
+	for (typename std::basic_string<charT>::size_type i = 0; i < length1 && i < length2; i++) {
 		if (string1[i] != string2[i]) return i;  // if characters do not match, return index
 	}
 	
@@ -669,7 +673,7 @@ void string_trie<charT, reservedChar>::verifyStructure() const {
 }
 
 template<typename charT, charT reservedChar>
-void string_trie<charT, reservedChar>::verifyNode(const node& node, size_t compareIndex, const std::basic_string<charT>& path) const {
+void string_trie<charT, reservedChar>::verifyNode(const node& node, typename std::basic_string<charT>::size_type compareIndex, const std::basic_string<charT>& path) const {
 	assert(node.string.length() > compareIndex);
 	assert(node.string.rfind(path, compareIndex) != std::basic_string<charT>::npos);
 	
