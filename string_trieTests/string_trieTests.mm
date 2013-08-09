@@ -356,16 +356,6 @@
 	copy(strings.begin(), strings.end(), self.trie->inserter());
 	
 	
-	NSMutableString *output = [NSMutableString string];
-	
-	for_each(self.trie->cbegin(), self.trie->cend(), [&](const std::basic_string<unichar>& word) {
-		[output appendString:[NSString stringWithCPPString:word]];
-		[output appendString:@"\n"];
-	});
-	
-	[output writeToFile:@"/Users/darrenmo/Developer/Open Source/string_trie/string_trieTests/wordList (output).txt" atomically:YES encoding:NSUTF8StringEncoding error:NULL];
-	
-	
 	strings.clear();
 	
 	copy(self.trie->cbegin(), self.trie->cend(), back_inserter(strings));
