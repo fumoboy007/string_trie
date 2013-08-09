@@ -294,7 +294,7 @@ void string_trie<charT, reservedChar>::insert(std::basic_string<charT> string) {
 	normalizeString(string);
 	
 	
-	std::vector<node*> nodes = search(string);
+	std::vector<node*> nodes = searchPath(string);
 	
 	if (!nodes.empty()) {  // if node found
 		node* node = nodes.back();
@@ -344,7 +344,7 @@ void string_trie<charT, reservedChar>::remove(std::basic_string<charT> string) {
 	normalizeString(string);
 	
 	
-	std::vector<node*> nodes = search(string);
+	std::vector<node*> nodes = searchPath(string);
 	
 	node* node = nullptr;
 	struct node* parent = nullptr;
@@ -407,9 +407,9 @@ bool string_trie<charT, reservedChar>::contains(std::basic_string<charT> string)
 	normalizeString(string);
 	
 	
-	std::vector<node*> nodes = search(string);
+	node* node = search(string);
 	
-	return !nodes.empty() && nodes.back()->string == string;
+	return node && node->string == string;
 }
 
 
@@ -418,7 +418,7 @@ auto string_trie<charT, reservedChar>::predecessor(std::basic_string<charT> stri
 	normalizeString(string);
 	
 	
-	std::vector<node*> nodes = search(string);
+	std::vector<node*> nodes = searchPath(string);
 	
 	if (nodes.empty()) return const_iterator(*this);
 	
@@ -469,7 +469,7 @@ auto string_trie<charT, reservedChar>::successor(std::basic_string<charT> string
 	normalizeString(string);
 	
 	
-	std::vector<node*> nodes = search(string);
+	std::vector<node*> nodes = searchPath(string);
 	
 	if (nodes.empty()) return const_iterator(*this);
 	
@@ -514,12 +514,10 @@ auto string_trie<charT, reservedChar>::prefixedStrings(std::basic_string<charT> 
 	normalizeString(prefix);
 	
 	
-	std::vector<node*> nodes = search(prefix);
+	node* node = search(prefix);
 	
-	if (nodes.empty()) return std::pair<const_iterator, const_iterator>(cend(), cend());
+	if (!node) return std::pair<const_iterator, const_iterator>(cend(), cend());
 	
-	
-	node* node = nodes.back();
 	
 	// If found node has the specified prefix
 	if (node->string.rfind(prefix, prefix.length() - 2) == std::basic_string<charT>::npos) return std::pair<const_iterator, const_iterator>(cend(), cend());
@@ -543,7 +541,37 @@ auto string_trie<charT, reservedChar>::prefixedStrings(std::basic_string<charT> 
 
 
 template<typename charT, charT reservedChar>
-auto string_trie<charT, reservedChar>::search(const std::basic_string<charT>& string) const -> std::vector<node*> {
+auto string_trie<charT, reservedChar>::search(const std::basic_string<charT>& string) const -> node* {
+	typename std::basic_string<charT>::size_type length = string.length();
+	
+	
+	node* node = root_;
+	
+	while (node) {
+		if (node->isLeaf) break;  // if at a leaf node
+		
+		
+		typename std::basic_string<charT>::size_type compareIndex = node->compareIndex;
+		
+		if (compareIndex > length) break;  // if the index we are looking at is past the end of the string
+		
+		const charT& character = string[compareIndex];
+		
+		
+		auto iter = node->children.find(character);
+		
+		if (iter == node->children.end()) break;  // if character not found in children map
+		
+		
+		node = iter->second;
+	}
+	
+	return node;
+}
+
+
+template<typename charT, charT reservedChar>
+auto string_trie<charT, reservedChar>::searchPath(const std::basic_string<charT>& string) const -> std::vector<node*> {
 	std::vector<node*> nodes;
 	
 	node* node = root_;

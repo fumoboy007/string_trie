@@ -403,4 +403,61 @@
 	XCTAssert(returnedNumPrefixStrings == actualNumPrefixedStrings, @"Number of returned prefixed strings (%lu) does not match the number of actual prefixed strings (%lu).", returnedNumPrefixStrings, actualNumPrefixedStrings);
 }
 
+- (void)testSpeed {
+	NSString *wordList = [NSString stringWithContentsOfFile:@"/Users/darrenmo/Developer/Open Source/string_trie/string_trieTests/wordList.txt" encoding:NSUTF8StringEncoding error:NULL];
+	
+	XCTAssert([wordList length] > 0, @"Word list not being loaded.");
+	
+	
+	NSMutableSet *words = [NSMutableSet set];
+	
+	[wordList enumerateLinesUsingBlock:^(NSString *word, BOOL *stop) {
+		self.trie->insert([word cppString]);
+		
+		[words addObject:word];
+	}];
+	
+	
+	std::vector<std::basic_string<unichar>> cppWords;
+	
+	for (NSString *word in words) {
+		cppWords.push_back([word cppString]);
+	}
+	
+	
+	static const NSUInteger numLoops = 100;
+	
+	double cppElapsedTime, cocoaElapsedTime;
+	clock_t startTime, endTime;
+	
+	
+	startTime = clock();
+	
+	for (int i = 0; i < numLoops; i++) {
+		for (const auto& word : cppWords) {
+			self.trie->contains(word);
+		}
+	}
+	
+	endTime = clock();
+	
+	cppElapsedTime = (double)(endTime - startTime) / CLOCKS_PER_SEC;
+	
+	
+	startTime = clock();
+	
+	for (int i = 0; i < numLoops; i++) {
+		for (NSString *word in words) {
+			[words containsObject:word];
+		}
+	}
+	
+	endTime = clock();
+	
+	cocoaElapsedTime = (double)(endTime - startTime) / CLOCKS_PER_SEC;
+	
+	
+	XCTAssert(cppElapsedTime < cocoaElapsedTime, @"string_trie search performance (%g seconds) is worse than NSSet search performance (%g seconds)", cppElapsedTime, cocoaElapsedTime);
+}
+
 @end

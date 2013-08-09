@@ -92,7 +92,8 @@ private:
 	size_t size_;
 	
 	
-	std::vector<node*> search(const std::basic_string<charT>& string) const;
+	node* search(const std::basic_string<charT>& string) const;
+	std::vector<node*> searchPath(const std::basic_string<charT>& string) const;
 	
 	const node* leftmostDescendant(const node& root) const;
 	const node* rightmostDescendant(const node& root) const;
