@@ -418,14 +418,25 @@
 	}];
 	
 	
-	std::vector<std::basic_string<unichar>> cppWords;
+	NSMutableArray *stringsToTest = [NSMutableArray array];
+	std::vector<std::basic_string<unichar>> cppStringsToTest;
 	
-	for (NSString *word in words) {
-		cppWords.push_back([word cppString]);
+	
+	const NSUInteger numStringsToTest = 1E6;
+	
+	std::basic_string<unichar> string = [@"abcdefghijklmnopqrstuvwxyz" cppString];
+	
+	for (int length = 1; length <= string.length(); length++) {
+		for (int i = 0; i < numStringsToTest / string.length(); i++) {
+			std::random_shuffle(string.begin(), string.end());
+			
+			std::basic_string<unichar> substring = string.substr(0, length);
+			
+			cppStringsToTest.push_back(substring);
+			[stringsToTest addObject:[NSString stringWithCPPString:substring]];
+		}
 	}
 	
-	
-	static const NSUInteger numLoops = 100;
 	
 	double cppElapsedTime, cocoaElapsedTime;
 	clock_t startTime, endTime;
@@ -433,10 +444,8 @@
 	
 	startTime = clock();
 	
-	for (int i = 0; i < numLoops; i++) {
-		for (const auto& word : cppWords) {
-			self.trie->contains(word);
-		}
+	for (const auto& word : cppStringsToTest) {
+		self.trie->contains(word);
 	}
 	
 	endTime = clock();
@@ -446,10 +455,8 @@
 	
 	startTime = clock();
 	
-	for (int i = 0; i < numLoops; i++) {
-		for (NSString *word in words) {
-			[words containsObject:word];
-		}
+	for (NSString *word in stringsToTest) {
+		[words containsObject:word];
 	}
 	
 	endTime = clock();
