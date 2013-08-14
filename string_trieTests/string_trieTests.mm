@@ -70,98 +70,63 @@
 	}
 }
 
+#define CPPAssertThrowsSpecific(expression, exception_class, format...) \
+({ \
+	BOOL __caughtException = NO; \
+	try { \
+		(expression); \
+	} \
+	catch (const exception_class& exception) { \
+		__caughtException = YES; \
+	}\
+	catch (const std::exception& exception) { \
+		__caughtException = YES; \
+		_XCTRegisterFailure(_XCTFailureDescription(_XCTAssertion_ThrowsSpecific, 0, @#expression, @#exception_class, [NSString stringWithUTF8String:typeid(exception).name()], [NSString stringWithUTF8String:exception.what()]),format); \
+	}\
+	if (!__caughtException) { \
+		_XCTRegisterFailure(_XCTFailureDescription(_XCTAssertion_ThrowsSpecific, 1, @#expression, @#exception_class),format); \
+	} \
+})
+
+#define CPPAssertNoThrow(expression, format...) \
+({ \
+	try { \
+		(expression); \
+	} \
+	catch (const std::exception& exception) { \
+		_XCTRegisterFailure(_XCTFailureDescription(_XCTAssertion_NoThrow, 0, @#expression, [NSString stringWithUTF8String:exception.what()]),format); \
+	}\
+})
+
 - (void)testInvalidString {
 	std::basic_string<unichar> string = [@"hello\nworld" cppString];
 	
-	try {
-		self.trie->insert(string);
-	} catch (const std::invalid_argument& exception) {
-		try {
-			self.trie->remove(string);
-		} catch (const std::invalid_argument& exception) {
-			try {
-				self.trie->contains(string);
-			} catch (const std::invalid_argument& exception) {
-				try {
-					self.trie->predecessor(string);
-				} catch (const std::invalid_argument& exception) {
-					try {
-						self.trie->successor(string);
-					} catch (const std::invalid_argument& exception) {
-						try {
-							self.trie->prefixedStrings(string);
-						} catch (const std::invalid_argument& exception) {
-							string = [@"hello world" cppString];
-							
-							try {
-								self.trie->insert(string);
-								self.trie->remove(string);
-								self.trie->contains(string);
-								self.trie->predecessor(string);
-								self.trie->successor(string);
-								self.trie->prefixedStrings(string);
-							} catch (const std::invalid_argument& exception) {
-								XCTFail(@"Inserting, removing, searching, finding the predecessor, finding the successor, or finding the prefixed strings for a valid string threw an exception.");
-							}
-							
-							
-							string = [@"" cppString];
-							
-							try {
-								self.trie->insert(string);
-							} catch (const std::invalid_argument& exception) {
-								try {
-									self.trie->remove(string);
-								} catch (const std::invalid_argument& exception) {
-									try {
-										self.trie->contains(string);
-									} catch (const std::invalid_argument& exception) {
-										try {
-											self.trie->predecessor(string);
-										} catch (const std::invalid_argument& exception) {
-											try {
-												self.trie->successor(string);
-											} catch (const std::invalid_argument& exception) {
-												try {
-													self.trie->prefixedStrings(string);
-												} catch (const std::invalid_argument& exception) {
-													return;
-												}
-												
-												XCTFail(@"Finding the prefixed strings for an empty string does not throw an exception.");
-											}
-											
-											XCTFail(@"Finding the successor of an empty string does not throw an exception.");
-										}
-										
-										XCTFail(@"Finding the predecessor of an empty string does not throw an exception.");
-									}
-									
-									XCTFail(@"Searching for an empty string does not throw an exception.");
-								}
-								
-								XCTFail(@"Removing an empty string does not throw an exception.");
-							}
-							
-							XCTFail(@"Inserting an empty string does not throw an exception.");
-						}
-							
-						XCTFail(@"Finding the prefixed strings for a string that contains the reserved character does not throw an exception.");
-					}
-					
-					XCTFail(@"Finding the successor of a string that contains the reserved character does not throw an exception.");
-				}
-				
-				XCTFail(@"Finding the predecessor of a string that contains the reserved character does not throw an exception.");
-			}
-			
-			XCTFail(@"Searching for a string that contains the reserved character does not throw an exception.");
-		}
-		
-		XCTFail(@"Removing a string that contains the reserved character does not throw an exception.");
-	}
+	CPPAssertThrowsSpecific(self.trie->insert(string), std::invalid_argument, @"Inserting a string containing the reserved character should throw an invalid_argument exception.");
+	CPPAssertThrowsSpecific(self.trie->remove(string), std::invalid_argument, @"Removing a string containing the reserved character should throw an invalid_argument exception.");
+	CPPAssertThrowsSpecific(self.trie->contains(string), std::invalid_argument, @"Searching for a string containing the reserved character should throw an invalid_argument exception.");
+	CPPAssertThrowsSpecific(self.trie->predecessor(string), std::invalid_argument, @"Finding the predecessor of a string containing the reserved character should throw an invalid_argument exception.");
+	CPPAssertThrowsSpecific(self.trie->successor(string), std::invalid_argument, @"Finding the successor of a string containing the reserved character should throw an invalid_argument exception.");
+	CPPAssertThrowsSpecific(self.trie->prefixedStrings(string), std::invalid_argument, @"Finding all strings prefixed with a string containing the reserved character should throw an invalid_argument exception.");
 	
-	XCTFail(@"Inserting a string that contains the reserved character does not throw an exception.");
+	
+	string.clear();
+	
+	CPPAssertThrowsSpecific(self.trie->insert(string), std::invalid_argument, @"Inserting an empty string should throw an invalid_argument exception.");
+	CPPAssertThrowsSpecific(self.trie->remove(string), std::invalid_argument, @"Removing an empty string should throw an invalid_argument exception.");
+	CPPAssertThrowsSpecific(self.trie->contains(string), std::invalid_argument, @"Searching for an empty string should throw an invalid_argument exception.");
+	CPPAssertThrowsSpecific(self.trie->predecessor(string), std::invalid_argument, @"Finding the predecessor of an empty string should throw an invalid_argument exception.");
+	CPPAssertThrowsSpecific(self.trie->successor(string), std::invalid_argument, @"Finding the successor of an empty string should throw an invalid_argument exception.");
+	CPPAssertThrowsSpecific(self.trie->prefixedStrings(string), std::invalid_argument, @"Finding all strings prefixed with an empty string should throw an invalid_argument exception.");
+	
+	
+	string = [@"hello world" cppString];
+	
+	CPPAssertNoThrow(self.trie->insert(string), @"Inserting a valid string should not throw an exception.");
+	CPPAssertNoThrow(self.trie->remove(string), @"Removing a valid string should not throw an exception.");
+	CPPAssertNoThrow(self.trie->contains(string), @"Searching for a valid string should not throw an exception.");
+	CPPAssertNoThrow(self.trie->predecessor(string), @"Finding the predecessor of a valid string should not throw an exception.");
+	CPPAssertNoThrow(self.trie->successor(string), @"Finding the successor of a valid string should not throw an exception.");
+	CPPAssertNoThrow(self.trie->prefixedStrings(string), @"Finding all strings prefixed with a valid string should not throw an exception.");
 }
 
 - (void)testInsertRemoveContains {
