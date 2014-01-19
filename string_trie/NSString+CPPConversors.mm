@@ -25,7 +25,7 @@
 }
 
 + (instancetype)stringWithCPPString:(const std::basic_string<unichar>&)cppString {
-	return [[[self class] alloc] initWithCPPString:cppString];
+	return [[self alloc] initWithCPPString:cppString];
 }
 
 
@@ -37,9 +37,7 @@
 	unichar buffer[length];
 	[self getCharacters:buffer range:NSMakeRange(0, length)];
 	
-	std::basic_string<unichar> cppString(buffer, length);
-	
-	return cppString;
+	return std::basic_string<unichar>(buffer, length);
 }
 
 @end

@@ -690,38 +690,38 @@ std::ostream& operator<<(std::ostream& out, std::basic_string<charT> string) {
 
 template<typename charT, charT reservedChar>
 void string_trie<charT, reservedChar>::printStructure() const {
-	std::cout << "begin structure" << std::endl;
+	std::cerr << "begin structure" << std::endl;
 	
 	if (root_) printNode(*root_);
 	
-	std::cout << "end structure" << std::endl << std::endl;
+	std::cerr << "end structure" << std::endl << std::endl;
 }
 
 template<typename charT, charT reservedChar>
 void string_trie<charT, reservedChar>::printNode(const node& node) const {
 	if (node.isLeaf) {
-		std::cout << "Leaf Node" << std::endl << "---------" << std::endl;
-		std::cout << "String: " << node.string << std::endl << std::endl;
+		std::cerr << "Leaf Node" << std::endl << "---------" << std::endl;
+		std::cerr << "String: " << node.string << std::endl << std::endl;
 	} else {
-		std::cout << "Internal Node" << std::endl << "-------------" << std::endl;
-		std::cout << "Compare index: " << node.compareIndex << std::endl;
-		std::cout << "Path: " << node.string << std::endl;
-		std::cout << "Children:";
+		std::cerr << "Internal Node" << std::endl << "-------------" << std::endl;
+		std::cerr << "Compare index: " << node.compareIndex << std::endl;
+		std::cerr << "Path: " << node.string << std::endl;
+		std::cerr << "Children:";
 		
 		for (const auto& element : node.children) {
-			std::cout << " (";
+			std::cerr << " (";
 			
 			struct node* child = element.second;
 			if (child->isLeaf) {
-				std::cout << child->string;
+				std::cerr << child->string;
 			} else {
-				std::cout << child->compareIndex;
+				std::cerr << child->compareIndex;
 			}
 			
-			std::cout << ")";
+			std::cerr << ")";
 		}
 		
-		std::cout << std::endl << std::endl;
+		std::cerr << std::endl << std::endl;
 		
 		
 		for (const auto& element : node.children) {
